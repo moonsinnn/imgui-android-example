@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.1)  # Minimum for Android NDK support
+cmake_minimum_required(VERSION 3.18.1)
 
 project(Fuby LANGUAGES C CXX)
 
@@ -29,18 +29,22 @@ if(ANDROID)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate")
 endif()
 
-# add_subdirectory(BNM EXCLUDE_FROM_ALL)
-
 # Include directories
 include_directories(
     imgui
     imgui/backends
     json
+    # bnm/include
     libs/xDL/include
+    libs/KittyMemory
+    libs/KittyMemory/Deps/Keystone/includes
     libs/arm64-v8a/curl/include
     libs/arm64-v8a/dobby/include
     libs/arm64-v8a/openssl/include
 )
+
+# add_subdirectory(bnm EXCLUDE_FROM_ALL)
+# get_target_property(BNM_INCLUDE_DIRECTORIES BNM BNM_INCLUDE_DIRECTORIES)
 
 # Source files
 set(SOURCES
@@ -63,28 +67,37 @@ set(IMGUI_SOURCES
     imgui/backends/imgui_impl_android.cpp
     imgui/backends/imgui_impl_opengl3.cpp
 )
+# KittyMemory 
+set(KITTY_SOURCES
+    libs/KittyMemory/KittyArm64.cpp
+    libs/KittyMemory/KittyMemory.cpp
+    libs/KittyMemory/KittyPtrValidator.cpp
+    libs/KittyMemory/KittyScanner.cpp
+    libs/KittyMemory/KittyUtils.cpp
+    libs/KittyMemory/MemoryBackup.cpp
+    libs/KittyMemory/MemoryPatch.cpp
+)
+
 # Add shared library for Android
 add_library(${PROJECT_NAME} SHARED
-    # sources
     ${SOURCES}
-    # xDL
     libs/xDL/xdl.c
     libs/xDL/xdl_iterate.c
     libs/xDL/xdl_linker.c
     libs/xDL/xdl_lzma.c
     libs/xDL/xdl_util.c
-    # imgui
     ${IMGUI_SOURCES}
+    ${KITTY_SOURCES}
 )
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME}
-    ${CMAKE_SOURCE_DIR}/libs/arm64-v8a/curl/lib/libcurl.a
+    PUBLIC
+    # ${CMAKE_SOURCE_DIR}/libs/arm64-v8a/curl/lib/libcurl.a
     ${CMAKE_SOURCE_DIR}/libs/arm64-v8a/dobby/lib/libdobby.a
-    ${CMAKE_SOURCE_DIR}/libs/arm64-v8a/openssl/lib/libssl.a
-    ${CMAKE_SOURCE_DIR}/libs/arm64-v8a/openssl/lib/libcrypto.a
-    
-    # Android specific libraries
+    # ${CMAKE_SOURCE_DIR}/libs/arm64-v8a/openssl/lib/libssl.a
+    # ${CMAKE_SOURCE_DIR}/libs/arm64-v8a/openssl/lib/libcrypto.a
+    ${CMAKE_SOURCE_DIR}/libs/KittyMemory/Deps/Keystone/libs-android/${CMAKE_ANDROID_ARCH_ABI}/libkeystone.a
     atomic
     # BNM
     log

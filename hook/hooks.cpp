@@ -142,7 +142,7 @@ void InitHooks()
 
     void *swap = ResolveSymbol("libEGL.so", "eglSwapBuffers");
     if (swap &&
-        DobbyHook(swap, (dobby_dummy_func_t)hooked_eglSwapBuffers, (dobby_dummy_func_t *)&orig_eglSwapBuffers) == 0)
+        DobbyHook(swap, (void *)hooked_eglSwapBuffers, (void **)&orig_eglSwapBuffers) == 0)
     {
         LOGI("Successfully hooked eglSwapBuffers");
     }
@@ -153,8 +153,7 @@ void InitHooks()
 
     void *createWin = ResolveSymbol("libEGL.so", "eglCreateWindowSurface");
 
-    if (createWin && DobbyHook(createWin, (dobby_dummy_func_t)hooked_eglCreateWindowSurface,
-                               (dobby_dummy_func_t *)&orig_eglCreateWindowSurface) == 0)
+    if (createWin && DobbyHook(createWin, (void *)hooked_eglCreateWindowSurface, (void **)&orig_eglCreateWindowSurface) == 0)
     {
         LOGI("Successfully hooked eglCreateWindowSurface");
     }

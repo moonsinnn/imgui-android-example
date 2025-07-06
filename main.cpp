@@ -4,7 +4,9 @@
 #include <dobby.h>
 #include <pthread.h>
 #include <unistd.h>
-
+//#include <BNM/Loading.hpp>
+#include <KittyInclude.hpp>
+#define kNO_KEYSTONE
 // Thread function
 void *pussy_thread(void *)
 {

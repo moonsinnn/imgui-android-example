@@ -97,8 +97,7 @@ void InitInputHooks()
     void *sym_queue = ResolveSymbol("libandroid.so", "AInputQueue_getEvent");
     if (sym_queue)
     {
-        if (DobbyHook(sym_queue, (dobby_dummy_func_t)my_AInputQueue_getEvent,
-                      (dobby_dummy_func_t *)&orig_AInputQueue_getEvent) == 0)
+        if (DobbyHook(sym_queue, (void *)my_AInputQueue_getEvent, (void **)&orig_AInputQueue_getEvent) == 0)
         {
             LOGI("Successfully hooked AInputQueue_getEvent");
             inputQueueHooked = true;
@@ -119,8 +118,7 @@ void InitInputHooks()
 
     if (sym_init)
     {
-        if (DobbyHook(sym_init, (dobby_dummy_func_t)myInitializeMotionEvent,
-                      (dobby_dummy_func_t *)&origInitializeMotion) == 0)
+        if (DobbyHook(sym_init, (void *)myInitializeMotionEvent, (void **)&origInitializeMotion) == 0)
         {
             LOGI("Successfully hooked InputConsumer::initializeMotionEvent");
         }
@@ -142,7 +140,7 @@ void InitInputHooks()
 
     if (sym_consume)
     {
-        if (DobbyHook(sym_consume, (dobby_dummy_func_t)myConsume, (dobby_dummy_func_t *)&origConsume) == 0)
+        if (DobbyHook(sym_consume, (void *)myConsume, (void **)&origConsume) == 0)
         {
             LOGI("Successfully hooked InputConsumer::consume (fallback)");
         }
