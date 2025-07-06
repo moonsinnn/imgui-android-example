@@ -1,16 +1,15 @@
 #include "imguisetup.h"
-#include "utils/init.h"
-#include "utils/log.h"
-#include "menu.h"
 #include "fonts/maple.h"
-#include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_android.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
+#include "imgui/imgui.h"
+#include "menu.h"
+#include "utils/init.h"
+#include "utils/log.h"
 
 #include <EGL/egl.h>
 #include <GLES3/gl3.h>
 #include <android/native_window.h>
-
 
 void InitImGui(ANativeWindow *window, EGLDisplay display, EGLSurface surface)
 {

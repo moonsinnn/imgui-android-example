@@ -1,9 +1,9 @@
 #include "hooks.h"
-#include "input.h"
 #include "../imguisetup.h"
 #include "../utils/init.h"
 #include "../utils/log.h"
 #include "../utils/time.h"
+#include "input.h"
 #include <EGL/egl.h>
 #include <GLES3/gl3.h>
 #include <chrono>
@@ -79,7 +79,7 @@ EGLSurface hooked_eglCreateWindowSurface(EGLDisplay dpy, EGLConfig config, ANati
 {
     EGLSurface surface = orig_eglCreateWindowSurface(dpy, config, window, attrib_list);
 
-    LOGI("ANativeWindow captured: %p", (void*)window);
+    LOGI("ANativeWindow captured: %p", (void *)window);
     LOGI("EGLSurface created: %p", surface);
 
     int w = ANativeWindow_getWidth(window);
@@ -92,7 +92,6 @@ EGLSurface hooked_eglCreateWindowSurface(EGLDisplay dpy, EGLConfig config, ANati
 
     return surface;
 }
-
 
 // Helper untuk resolve symbol
 void *ResolveSymbol(const char *libName, const char *symbolName)
